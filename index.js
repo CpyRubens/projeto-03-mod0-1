@@ -1,3 +1,4 @@
+
 const prompt = require("prompt-sync")();
 console.clear();
 
@@ -39,7 +40,9 @@ let jogadorStatuses = {
     this.Dinheiro += 1;
     this.Vigor -= 1;
     passarTempo();
-    console.log("Você investe no mercado de ações e trabalha obtendo um retorno legal\nDinheiro +1 \nVigor -1");
+    console.log(
+      "Você investe no mercado de ações e trabalha obtendo um retorno legal\nDinheiro +1 \nVigor -1"
+    );
   },
 
   sonegacao: function () {
@@ -48,7 +51,7 @@ let jogadorStatuses = {
     this.Legalidade -= 1;
     passarTempo();
     console.log(
-      "Você dribla a fiscalização e não declara seus bens, fugindo das impostos e acumulando mais dinheiro, porém entrando na mira da Lei\n"
+      "Você dribla a fiscalização e não declara seus bens, fugindo das impostos e acumulando mais dinheiro, porém entrando na mira da Lei e de outros...\nLegalidade -1\nDinheiro +1\nRespeito -1"
     );
   },
 };
@@ -86,25 +89,32 @@ function randomEvent() {
     }
   }
 }
-function imposto(){
-  if (semanasPercorridas > 0 && semanasPercorridas % 4 == 0){
-    console.log("É hora de pagar os impostos, mas você também pode sonegar este evento")
-    let imposto = prompt("Pagar ou Sonegar?")
-    while (imposto.toLocaleLowerCase() != "pagar" && imposto.toLocaleLowerCase() != "sonegar"){
-      imposto = prompt("PAGAR ou SONEGAR?")
+function imposto() {
+  if (semanasPercorridas > 0 && semanasPercorridas % 4 == 0) {
+    console.log(
+      "É hora de pagar os impostos, mas você também pode sonegar este evento"
+    );
+    let imposto = prompt("Pagar ou Sonegar?");
+    while (
+      imposto.toLocaleLowerCase() != "pagar" &&
+      imposto.toLocaleLowerCase() != "sonegar"
+    ) {
+      imposto = prompt("PAGAR ou SONEGAR?");
     }
-    if (imposto.toLocaleLowerCase() == "pagar" ){
-      console.log("Você paga seus impostos como um cidadão normal. \nDinheiro -1")
+    if (imposto.toLocaleLowerCase() == "pagar") {
+      console.log(
+        "Você paga seus impostos como um cidadão normal. \nDinheiro -1"
+      );
       jogadorStatuses.Dinheiro -= 1;
-    }
-    else{
-      console.log("Você sonega os impostos desse mês com tranquilidade e acumula mais dinheiro. \nDinheiro +1 \nLegalidade -1")
+    } else {
+      console.log(
+        "Você sonega os impostos desse mês com tranquilidade e acumula mais dinheiro. \nDinheiro +1 \nLegalidade -1"
+      );
       jogadorStatuses.Dinheiro += 1;
       jogadorStatuses.Legalidade -= 1;
     }
   }
 }
-
 
 console.log(
   "Bem vindo a sua jornada em busca do sucesso, para isso você vai ter que saber bem onde utilzar o seu dinheiro. Todas as saus ações tem consequências!\n Para vencer chegue a 10 em dinheiro ou respeito, porém se qualquer atributo chegara a 0 você perde, cuidado!\nOnde deseja investir o dinheiro essa semana?\n"
@@ -112,15 +122,19 @@ console.log(
 
 //laço
 while (1) {
+  
   console.log(`-----------------------------------------------------------------------------------------------------------------
 [1] Doar dinheiro para a instituições de caridade: irá te conceder muito respeito social e te dará energias para continuar.
 [2] Investir dinheiro no mercado negro: te rende muito dinheiro, porém destrói sua reputação e pode te colocar atrás das grades.
 [3] Investir/trabalhar: te rende dinheiro honesto porém cansa aos poucos\n
----------------------------------------------------------------------------------------------------------------------------------`)
-  decisao = +prompt("Escolha como irá agir durante este mês");
+[4] Dar calote: Você lucra ignorando as dívidas que possuí com outros
+[5] Pressione "5" para parar o jogo\n----------------------------------------------------------------------------------------------------------------------`);
+
+  let decisao = +prompt("Escolha como irá agir durante este mês");
   while (isNaN(decisao) && decisao >= 6) {
     decisao = +prompt("Escolha um numeral válido!");
   }
+  
   if (decisao == 1) {
     jogadorStatuses.caridade();
   } else if (decisao == 2) {
