@@ -1,13 +1,12 @@
-
-const prompt = require("prompt-sync")();
 console.clear();
+const prompt = require("prompt-sync")();
 
 // variável de controle de tempo e função de controle de tempo
 let semanasPercorridas = 0;
 
 function passarTempo() {
   semanasPercorridas = semanasPercorridas + 1;
-  console.log("Se passou mais um mês");
+  console.log("Se passou mais uma semana");
   return semanasPercorridas;
 }
 
@@ -17,6 +16,7 @@ let jogadorStatuses = {
   Dinheiro: 5,
   Legalidade: 5,
   Vigor: 5,
+  Vida: 1,
 
   caridade: function () {
     this.Dinheiro -= 2;
@@ -51,13 +51,13 @@ let jogadorStatuses = {
     this.Legalidade -= 1;
     passarTempo();
     console.log(
-      "Você dribla a fiscalização e não declara seus bens, fugindo das impostos e acumulando mais dinheiro, porém entrando na mira da Lei e de outros...\nLegalidade -1\nDinheiro +1\nRespeito -1"
+      "Você dribla a fiscalização, não paga as dívidas e acumulando mais dinheiro, porém entrando na mira da Lei e de outros...\nLegalidade -1\nDinheiro +1\nRespeito -1"
     );
   },
 };
 
 //função de evento aleatório dentro do jogo(sobre determinada situação)
-function randomEvent() {
+function sequestrador() {
   let random100 = Math.floor(Math.random() * 100);
   console.log(random100);
   if (jogadorStatuses.Dinheiro >= 7 && random100 >= 75) {
@@ -81,6 +81,7 @@ function randomEvent() {
       let randomdeath = Math.floor(Math.random() * 100);
       if (randomdeath >= 50) {
         console.log("Você foi morto ao tentar fugir. Fim de jogo!");
+        jogadorStatuses.Vida = 0
       } else {
         console.log(
           "Você consegue escapar com sucesso dos sequestradores e volta a sua jornada!"
@@ -117,11 +118,14 @@ function imposto() {
 }
 
 console.log(
-  "Bem vindo a sua jornada em busca do sucesso, para isso você vai ter que saber bem onde utilzar o seu dinheiro. Todas as saus ações tem consequências!\n Para vencer chegue a 10 em dinheiro ou respeito, porém se qualquer atributo chegara a 0 você perde, cuidado!\nOnde deseja investir o dinheiro essa semana?\n"
-);
+  `Bem vindo a sua jornada em busca do sucesso, para isso você vai ter que saber bem onde utilzar o seu dinheiro. Todas as saus ações tem consequências!\n Para vencer chegue a 10 em dinheiro ou respeito, porém se qualquer atributo chegara a 0 você perde, cuidado!\n
+  Atenção! Você também pagará, ou não, impostos.
+  Cuidado! Acumular dinheiro pode traser riscos para sua cabeça!
+  `
+  );
 
 //laço
-while (1) {
+while (jogadorStatuses.Vida == 1) {
   
   console.log(`-----------------------------------------------------------------------------------------------------------------
 [1] Doar dinheiro para a instituições de caridade: irá te conceder muito respeito social e te dará energias para continuar.
@@ -130,9 +134,9 @@ while (1) {
 [4] Dar calote: Você lucra ignorando as dívidas que possuí com outros
 [5] Pressione "5" para parar o jogo\n----------------------------------------------------------------------------------------------------------------------`);
 
-  let decisao = +prompt("Escolha como irá agir durante este mês");
-  while (isNaN(decisao) && decisao >= 6) {
-    decisao = +prompt("Escolha um numeral válido!");
+  let decisao = +prompt("Escolha como irá agir durante esta semana");
+  while (isNaN(decisao) || decisao >= 6) {
+    decisao = prompt("Escolha um numeral válido!");
   }
   
   if (decisao == 1) {
@@ -147,6 +151,7 @@ while (1) {
     break;
   }
 
+  // exibe os status do jogador
   console.log(
     "Tempo percorrido",
     semanasPercorridas,
@@ -168,9 +173,9 @@ while (1) {
     break;
   } else if (
     jogadorStatuses.Dinheiro >= 10 &&
-    jogadorStatuses.Vigor <= 0 &&
-    jogadorStatuses.Legalidade <= 0 &&
-    jogadorStatuses.Respeito <= 0
+    jogadorStatuses.Vigor > 0 &&
+    jogadorStatuses.Legalidade > 0 &&
+    jogadorStatuses.Respeito > 0
   ) {
     console.log(
       "Parabéns, você atingiu dinheiro suficiente para viver bem o resto da sua vida! Parabéns\n"
@@ -184,9 +189,9 @@ while (1) {
     );
     break;
   } else if (
-    jogadorStatuses.Dinheiro <= 0 &&
-    jogadorStatuses.Vigor <= 0 &&
-    jogadorStatuses.Legalidade <= 0 &&
+    jogadorStatuses.Dinheiro > 0 &&
+    jogadorStatuses.Vigor > 0 &&
+    jogadorStatuses.Legalidade > 0 &&
     jogadorStatuses.Respeito >= 10
   ) {
     console.log(
@@ -209,6 +214,7 @@ while (1) {
     );
     break;
   }
-  randomEvent();
+  //chamada das funções de evento
+  sequestrador();
   imposto();
 }
